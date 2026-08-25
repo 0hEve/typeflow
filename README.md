@@ -11,6 +11,22 @@ nearby-key mistakes before correcting them with backspace.
 Everything is initiated by you: TypeFlow starts, pauses, and resumes only through
 its menu or global hotkey.
 
+## Install
+
+```sh
+brew install --cask 0hEve/typeflow/typeflow
+```
+
+Homebrew installs `TypeFlow.app` in `/Applications`. The first installation may
+ask you to trust the cask.
+
+Alternatively, download the latest ZIP from [GitHub Releases](https://github.com/0hEve/typeflow/releases),
+unzip it, and move `TypeFlow.app` to `/Applications`.
+
+The beta is ad-hoc signed but not Apple-notarized. On first launch, macOS may ask
+you to confirm that you want to open it. Right-click `TypeFlow.app`, select
+**Open**, then confirm **Open**. You do not need to disable Gatekeeper.
+
 ## Features
 
 - Global **Control–Option–Command–T** start, pause, and resume hotkey.
@@ -29,26 +45,6 @@ its menu or global hotkey.
 - Apple silicon for the prebuilt beta. Building from source uses your Mac's
   current architecture.
 - Accessibility permission to send keystrokes to the active application.
-
-## Install
-
-### Homebrew
-
-```sh
-brew install --cask 0hEve/typeflow/typeflow
-```
-
-The first installation from a non-official tap may ask you to trust this cask.
-See the [Homebrew tap](https://github.com/0hEve/homebrew-typeflow) for details.
-
-### Download
-
-Download the latest ZIP from [GitHub Releases](https://github.com/0hEve/typeflow/releases),
-unzip it, and move `TypeFlow.app` to `/Applications`.
-
-The beta is ad-hoc signed but not Apple-notarized. On first launch, macOS may ask
-you to confirm that you want to open it. Right-click `TypeFlow.app`, select
-**Open**, then confirm **Open**. You do not need to disable Gatekeeper.
 
 ## Use
 
