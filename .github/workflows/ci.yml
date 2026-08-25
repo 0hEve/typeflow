@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check typing policies
+        run: ./scripts/check_policy.sh
+      - name: Build release with warnings as errors
+        run: swift build -c release -Xswiftc -warnings-as-errors
+      - name: Package app
+        run: ./scripts/package_release.sh
+      - name: Validate app bundle
+        run: |
+          plutil -lint dist/TypeFlow.app/Contents/Info.plist
+          codesign --verify --deep --strict --verbose=2 dist/TypeFlow.app
