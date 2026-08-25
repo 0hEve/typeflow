@@ -78,16 +78,10 @@ enum TypingPolicy {
         wordsPerMinute range: ClosedRange<Double>,
         using rng: inout R
     ) -> UInt64 {
-        let wordsPerMinute = Double.random(in: range, using: &rng)
-        let baseSeconds = 60.0 / (wordsPerMinute * 5.0)
-        let jitter = Double.random(in: 0.82...1.18, using: &rng)
-        let spacingFactor = character.isWhitespace ? 0.62 : 1.0
-        let fastestSeconds = 60.0 / (range.upperBound * 5.0)
-        let slowestSeconds = 60.0 / (range.lowerBound * 5.0)
-        let boundedSeconds = min(
-            max(baseSeconds * jitter * spacingFactor, fastestSeconds),
-            slowestSeconds
-        )
-        return UInt64(boundedSeconds * 1_000_000_000)
+        let targetWPM = Double.random(in: range, using: &rng)
+        let baseSeconds = 60.0 / (targetWPM * 5.0)
+        let rhythmJitter = Double.random(in: 0.68...1.32, using: &rng)
+        let characterFactor = character.isWhitespace ? 0.55 : 1.1
+        return UInt64(baseSeconds * rhythmJitter * characterFactor * 1_000_000_000)
     }
 }

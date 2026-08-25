@@ -43,15 +43,24 @@ require(
 )
 
 var pacingRNG = SeededRandomNumberGenerator(seed: 77)
-for _ in 0..<100 {
+let pacingText = String(repeating: "human typing should have an uneven rhythm ", count: 200)
+var pacingNanoseconds: UInt64 = 0
+var pacingDelays = Set<UInt64>()
+for character in pacingText {
     let delay = TypingPolicy.characterDelayNanoseconds(
-        for: "a",
-        wordsPerMinute: 50...70,
+        for: character,
+        wordsPerMinute: 60...80,
         using: &pacingRNG
     )
-    require(delay >= 171_000_000, "custom character delay was too short")
-    require(delay <= 241_000_000, "custom character delay was too long")
+    pacingNanoseconds += delay
+    pacingDelays.insert(delay)
 }
+let pacingMinutes = Double(pacingNanoseconds) / 60_000_000_000
+let measuredWPM = (Double(pacingText.count) / 5) / pacingMinutes
+require((60...80).contains(measuredWPM), "60–80 WPM base pace measured outside its range")
+require(pacingDelays.count > pacingText.count / 2, "per-keystroke timing was not varied")
+require(pacingDelays.min()! < 100_000_000, "fast keystrokes lacked natural variation")
+require(pacingDelays.max()! > 250_000_000, "slow keystrokes lacked natural variation")
 
 var pauseRNG = SeededRandomNumberGenerator(seed: 17)
 for _ in 0..<100 {
