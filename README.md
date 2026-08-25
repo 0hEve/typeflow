@@ -30,7 +30,8 @@ you to confirm that you want to open it. Right-click `TypeFlow.app`, select
 ## Features
 
 - Global **Control–Option–Command–T** start, pause, and resume hotkey.
-- Configurable WPM range that always varies rather than becoming perfectly fixed.
+- Configurable WPM range used as the average base pace, with fresh timing
+  variation for every keystroke.
 - Optional corrections using nearby US QWERTY keys, duplicated letters, or
   adjacent transpositions.
 - Configurable minimum and maximum words between corrections.
@@ -75,7 +76,7 @@ Open TypeFlow from the menu bar and select **Settings**.
 
 | Setting | Default | Behavior |
 | --- | --- | --- |
-| Typing speed | 40–60 WPM | Targets a varying pace within the range. The minimum must remain below the maximum. |
+| Typing speed | 40–60 WPM | Sets the average base pace. Every keystroke varies, and the minimum must remain below the maximum. |
 | Natural corrections | On | Enables plausible mistakes and backspace correction. |
 | Words between corrections | 5–15 | Chooses a new random interval after each correction. |
 | Second mistake chance | 20% | Controls how often a word gets a second failed attempt before correction. |
@@ -86,6 +87,10 @@ Settings apply when the next run starts. Stop and reset before restarting if you
 change settings while a draft is paused. Select any numeric value to type it
 directly, or use its stepper. Speed, correction-interval, and pause values have
 no arbitrary upper cap.
+
+The WPM range controls ordinary keystroke pacing. Enabled corrections,
+backspacing, punctuation reactions, short thinking pauses, and paragraph pauses
+add time on top, so a full passage can finish below the selected base WPM.
 
 ## Build from source
 

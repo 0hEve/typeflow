@@ -29,7 +29,7 @@ struct SettingsView: View {
         settingsSection(
             title: "Typing speed",
             systemImage: "speedometer",
-            summary: "Targets a varying pace within the selected range."
+            summary: "Uses the range as the average base pace and varies every keystroke."
         ) {
             stepperRow(
                 "Minimum",

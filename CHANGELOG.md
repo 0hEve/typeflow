@@ -2,6 +2,14 @@
 
 All notable changes to TypeFlow are documented here.
 
+## 0.1.4 - 2026-08-25
+
+### Changed
+
+- Randomize the target pace and rhythm independently for every keystroke.
+- Remove delay clipping that made fast and slow keystrokes feel too uniform.
+- Treat the configured WPM range as the average base pace while preserving natural variation.
+
 ## 0.1.3 - 2026-08-25
 
 ### Fixed
