@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Check typing policies
         run: ./scripts/check_policy.sh
       - name: Build release with warnings as errors
