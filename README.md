@@ -70,7 +70,7 @@ Open TypeFlow from the menu bar and select **Settings**.
 
 | Setting | Default | Behavior |
 | --- | --- | --- |
-| Typing speed | 40–60 WPM | Targets a varying pace within the range. The minimum and maximum remain at least 5 WPM apart. |
+| Typing speed | 40–60 WPM | Targets a varying pace within the range. The minimum must remain below the maximum. |
 | Natural corrections | On | Enables plausible mistakes and backspace correction. |
 | Words between corrections | 5–15 | Chooses a new random interval after each correction. |
 | Second mistake chance | 20% | Controls how often a word gets a second failed attempt before correction. |
@@ -78,7 +78,9 @@ Open TypeFlow from the menu bar and select **Settings**.
 | Paragraph timing | Range, 10–30 seconds | Chooses a random delay, or can be changed to a fixed duration. |
 
 Settings apply when the next run starts. Stop and reset before restarting if you
-change settings while a draft is paused.
+change settings while a draft is paused. Select any numeric value to type it
+directly, or use its stepper. Speed, correction-interval, and pause values have
+no arbitrary upper cap.
 
 ## Build from source
 

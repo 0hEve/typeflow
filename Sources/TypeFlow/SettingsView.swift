@@ -33,14 +33,18 @@ struct SettingsView: View {
         ) {
             stepperRow(
                 "Minimum",
-                value: $preferences.minimumWPM,
-                range: 20...max(20, preferences.maximumWPM - 5),
+                value: Binding(
+                    get: { preferences.minimumWPM },
+                    set: preferences.setMinimumWPM
+                ),
                 suffix: "WPM"
             )
             stepperRow(
                 "Maximum",
-                value: $preferences.maximumWPM,
-                range: min(120, preferences.minimumWPM + 5)...120,
+                value: Binding(
+                    get: { preferences.maximumWPM },
+                    set: preferences.setMaximumWPM
+                ),
                 suffix: "WPM"
             )
         }
@@ -57,20 +61,26 @@ struct SettingsView: View {
             if preferences.naturalCorrections {
                 stepperRow(
                     "Minimum words between",
-                    value: $preferences.correctionMinimumWords,
-                    range: 1...max(1, preferences.correctionMaximumWords - 1),
+                    value: Binding(
+                        get: { preferences.correctionMinimumWords },
+                        set: preferences.setCorrectionMinimum
+                    ),
                     suffix: "words"
                 )
                 stepperRow(
                     "Maximum words between",
-                    value: $preferences.correctionMaximumWords,
-                    range: min(50, preferences.correctionMinimumWords + 1)...50,
+                    value: Binding(
+                        get: { preferences.correctionMaximumWords },
+                        set: preferences.setCorrectionMaximum
+                    ),
                     suffix: "words"
                 )
                 stepperRow(
                     "Second mistake chance",
-                    value: $preferences.repeatedMistakeChance,
-                    range: 0...100,
+                    value: Binding(
+                        get: { preferences.repeatedMistakeChance },
+                        set: preferences.setRepeatedMistakeChance
+                    ),
                     step: 5,
                     suffix: "%"
                 )
@@ -98,21 +108,27 @@ struct SettingsView: View {
                 case .range:
                     stepperRow(
                         "Minimum pause",
-                        value: $preferences.paragraphMinimumSeconds,
-                        range: 1...max(1, preferences.paragraphMaximumSeconds - 1),
+                        value: Binding(
+                            get: { preferences.paragraphMinimumSeconds },
+                            set: preferences.setParagraphMinimum
+                        ),
                         suffix: "seconds"
                     )
                     stepperRow(
                         "Maximum pause",
-                        value: $preferences.paragraphMaximumSeconds,
-                        range: min(180, preferences.paragraphMinimumSeconds + 1)...180,
+                        value: Binding(
+                            get: { preferences.paragraphMaximumSeconds },
+                            set: preferences.setParagraphMaximum
+                        ),
                         suffix: "seconds"
                     )
                 case .fixed:
                     stepperRow(
                         "Pause length",
-                        value: $preferences.paragraphFixedSeconds,
-                        range: 1...180,
+                        value: Binding(
+                            get: { preferences.paragraphFixedSeconds },
+                            set: preferences.setParagraphFixed
+                        ),
                         suffix: "seconds"
                     )
                 }
@@ -146,17 +162,21 @@ struct SettingsView: View {
     private func stepperRow(
         _ title: String,
         value: Binding<Int>,
-        range: ClosedRange<Int>,
         step: Int = 1,
         suffix: String
     ) -> some View {
         HStack(spacing: 10) {
             Text(title)
             Spacer()
-            Text("\(value.wrappedValue) \(suffix)")
-                .foregroundStyle(.secondary)
+            TextField(title, value: value, format: .number)
+                .textFieldStyle(.roundedBorder)
+                .multilineTextAlignment(.trailing)
                 .monospacedDigit()
-            Stepper(title, value: value, in: range, step: step)
+                .frame(width: 72)
+                .accessibilityLabel(title)
+            Text(suffix)
+                .foregroundStyle(.secondary)
+            Stepper(title, value: value, step: step)
                 .labelsHidden()
                 .accessibilityLabel("\(title), \(value.wrappedValue) \(suffix)")
         }
