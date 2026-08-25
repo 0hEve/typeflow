@@ -3,6 +3,8 @@ import Foundation
 
 @MainActor
 final class AppModel: ObservableObject {
+    private static let readyNotice = "Paste text, place your cursor, then press the hotkey."
+
     @Published var draft: String {
         didSet { defaults.set(draft, forKey: Keys.draft) }
     }
@@ -10,7 +12,7 @@ final class AppModel: ObservableObject {
     @Published private(set) var completedCharacters = 0
     @Published private(set) var totalCharacters = 0
     @Published private(set) var accessibilityGranted = AccessibilityAccess.isTrusted
-    @Published private(set) var notice = "Paste text, place your cursor, then press the hotkey."
+    @Published private(set) var notice = AppModel.readyNotice
 
     let preferences: TypingPreferences
 
@@ -56,7 +58,7 @@ final class AppModel: ObservableObject {
     func requestAccessibility() {
         accessibilityGranted = AccessibilityAccess.request()
         if accessibilityGranted {
-            notice = "Accessibility access is ready."
+            notice = Self.readyNotice
         } else {
             notice = "Enable TypeFlow in Privacy & Security → Accessibility, then try again."
             AccessibilityAccess.openSettings()
@@ -66,10 +68,12 @@ final class AppModel: ObservableObject {
     func refreshAccessibility(announce: Bool = true) {
         let wasGranted = accessibilityGranted
         accessibilityGranted = AccessibilityAccess.isTrusted
-        if announce || accessibilityGranted != wasGranted {
-            notice = accessibilityGranted
-                ? "Accessibility access is ready."
-                : "TypeFlow still needs Accessibility access."
+        if accessibilityGranted {
+            if !wasGranted {
+                notice = Self.readyNotice
+            }
+        } else if announce || accessibilityGranted != wasGranted {
+            notice = "TypeFlow still needs Accessibility access."
         }
     }
 
