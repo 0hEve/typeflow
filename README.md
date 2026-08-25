@@ -39,6 +39,15 @@ you to confirm that you want to open it. Right-click `TypeFlow.app`, select
 - Three-second menu countdown so you can return focus to the destination field.
 - Draft, progress, and settings persistence between launches.
 
+### How corrections work
+
+TypeFlow chooses a random interval from your **Words between corrections** range.
+When the interval is reached, it creates a plausible typo by substituting a
+nearby key on a US QWERTY keyboard, duplicating a letter, or swapping two
+adjacent letters. It pauses briefly, backspaces the typo, and types the correct
+word. The **Second mistake chance** controls whether it makes another failed
+attempt before correcting the word.
+
 ## Requirements
 
 - macOS 13 Ventura or later.

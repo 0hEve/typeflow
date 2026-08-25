@@ -168,12 +168,7 @@ struct SettingsView: View {
         HStack(spacing: 10) {
             Text(title)
             Spacer()
-            TextField(title, value: value, format: .number)
-                .textFieldStyle(.roundedBorder)
-                .multilineTextAlignment(.trailing)
-                .monospacedDigit()
-                .frame(width: 72)
-                .accessibilityLabel(title)
+            NumericSettingField(title: title, value: value)
             Text(suffix)
                 .foregroundStyle(.secondary)
             Stepper(title, value: value, step: step)
@@ -181,5 +176,51 @@ struct SettingsView: View {
                 .accessibilityLabel("\(title), \(value.wrappedValue) \(suffix)")
         }
         .font(.subheadline)
+    }
+}
+
+private struct NumericSettingField: View {
+    let title: String
+    @Binding var value: Int
+
+    @State private var draft: String
+    @FocusState private var isFocused: Bool
+
+    init(title: String, value: Binding<Int>) {
+        self.title = title
+        _value = value
+        _draft = State(initialValue: String(value.wrappedValue))
+    }
+
+    var body: some View {
+        TextField(title, text: $draft)
+            .textFieldStyle(.roundedBorder)
+            .multilineTextAlignment(.trailing)
+            .monospacedDigit()
+            .frame(width: 72)
+            .focused($isFocused)
+            .accessibilityLabel(title)
+            .onSubmit(commit)
+            .onChange(of: isFocused) { focused in
+                if !focused {
+                    commit()
+                }
+            }
+            .onChange(of: value) { newValue in
+                if !isFocused {
+                    draft = String(newValue)
+                }
+            }
+    }
+
+    private func commit() {
+        let trimmed = draft.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let parsed = Int(trimmed) else {
+            draft = String(value)
+            return
+        }
+
+        value = parsed
+        draft = String(value)
     }
 }
