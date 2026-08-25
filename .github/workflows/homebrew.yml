@@ -1,0 +1,25 @@
+name: Homebrew
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+      - name: Check cask style
+        run: brew style Casks/typeflow.rb
+      - name: Register tap
+        run: |
+          brew tap 0hEve/typeflow "$GITHUB_WORKSPACE"
+          brew trust --cask 0hEve/typeflow/typeflow
+      - name: Audit cask
+        run: brew audit --cask --strict 0hEve/typeflow/typeflow
+      - name: Fetch release
+        run: brew fetch --cask 0hEve/typeflow/typeflow

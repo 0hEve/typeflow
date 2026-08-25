@@ -14,11 +14,22 @@ its menu or global hotkey.
 ## Install
 
 ```sh
+brew tap 0hEve/typeflow https://github.com/0hEve/typeflow.git
 brew install --cask 0hEve/typeflow/typeflow
 ```
 
-Homebrew installs `TypeFlow.app` in `/Applications`. The first installation may
-ask you to trust the cask.
+The first command registers this repository as the TypeFlow tap. Homebrew then
+installs `TypeFlow.app` in `/Applications`; the first installation may ask you
+to trust the cask.
+
+If you previously used the separate `homebrew-typeflow` repository, switch the
+existing tap to this repository once before updating:
+
+```sh
+brew untap 0hEve/typeflow
+brew tap 0hEve/typeflow https://github.com/0hEve/typeflow.git
+brew update
+```
 
 Alternatively, download the latest ZIP from [GitHub Releases](https://github.com/0hEve/typeflow/releases),
 unzip it, and move `TypeFlow.app` to `/Applications`.
@@ -26,6 +37,9 @@ unzip it, and move `TypeFlow.app` to `/Applications`.
 The beta is ad-hoc signed but not Apple-notarized. On first launch, macOS may ask
 you to confirm that you want to open it. Right-click `TypeFlow.app`, select
 **Open**, then confirm **Open**. You do not need to disable Gatekeeper.
+
+Uninstall TypeFlow with `brew uninstall --cask typeflow`. To remove its saved
+preferences too, use `brew uninstall --zap --cask typeflow`.
 
 ## Features
 
@@ -113,6 +127,17 @@ Create a versioned release archive with:
 
 The scripts compile the Swift package, build a standard `.app` bundle, ad-hoc
 sign it, and create a ZIP suitable for GitHub Releases.
+
+### Updating the Homebrew cask
+
+The Homebrew cask lives in this repository at `Casks/typeflow.rb`. Each release
+must update its `version` and `sha256`. Validate it with:
+
+```sh
+brew style Casks/typeflow.rb
+brew audit --cask --strict 0hEve/typeflow/typeflow
+brew fetch --cask 0hEve/typeflow/typeflow
+```
 
 ## Known limitations
 
