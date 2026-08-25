@@ -2,6 +2,17 @@
 
 All notable changes to TypeFlow are documented here.
 
+## 0.1.3 - 2026-08-25
+
+### Fixed
+
+- Keep incomplete numeric input local to its field until it is submitted or loses focus.
+- Validate a range by adjusting only the field being edited, never its paired minimum or maximum.
+
+### Documentation
+
+- Explain how randomized keyboard-adjacent corrections are generated and repaired.
+
 ## 0.1.2 - 2026-08-25
 
 ### Changed

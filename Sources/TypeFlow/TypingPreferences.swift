@@ -173,23 +173,19 @@ final class TypingPreferences: ObservableObject {
     }
 
     func setMinimumWPM(_ value: Int) {
-        minimumWPM = min(max(value, 1), Int.max - 1)
-        maximumWPM = max(maximumWPM, minimumWPM + 1)
+        minimumWPM = min(max(value, 1), maximumWPM - 1)
     }
 
     func setMaximumWPM(_ value: Int) {
-        maximumWPM = max(value, 2)
-        minimumWPM = min(minimumWPM, maximumWPM - 1)
+        maximumWPM = max(value, minimumWPM + 1)
     }
 
     func setCorrectionMinimum(_ value: Int) {
-        correctionMinimumWords = min(max(value, 1), Int.max - 1)
-        correctionMaximumWords = max(correctionMaximumWords, correctionMinimumWords + 1)
+        correctionMinimumWords = min(max(value, 1), correctionMaximumWords - 1)
     }
 
     func setCorrectionMaximum(_ value: Int) {
-        correctionMaximumWords = max(value, 2)
-        correctionMinimumWords = min(correctionMinimumWords, correctionMaximumWords - 1)
+        correctionMaximumWords = max(value, correctionMinimumWords + 1)
     }
 
     func setRepeatedMistakeChance(_ value: Int) {
@@ -197,13 +193,11 @@ final class TypingPreferences: ObservableObject {
     }
 
     func setParagraphMinimum(_ value: Int) {
-        paragraphMinimumSeconds = min(max(value, 1), Int.max - 1)
-        paragraphMaximumSeconds = max(paragraphMaximumSeconds, paragraphMinimumSeconds + 1)
+        paragraphMinimumSeconds = min(max(value, 1), paragraphMaximumSeconds - 1)
     }
 
     func setParagraphMaximum(_ value: Int) {
-        paragraphMaximumSeconds = max(value, 2)
-        paragraphMinimumSeconds = min(paragraphMinimumSeconds, paragraphMaximumSeconds - 1)
+        paragraphMaximumSeconds = max(value, paragraphMinimumSeconds + 1)
     }
 
     func setParagraphFixed(_ value: Int) {

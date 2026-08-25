@@ -11,6 +11,22 @@ nearby-key mistakes before correcting them with backspace.
 Everything is initiated by you: TypeFlow starts, pauses, and resumes only through
 its menu or global hotkey.
 
+## Install
+
+```sh
+brew install --cask 0hEve/typeflow/typeflow
+```
+
+Homebrew installs `TypeFlow.app` in `/Applications`. The first installation may
+ask you to trust the cask.
+
+Alternatively, download the latest ZIP from [GitHub Releases](https://github.com/0hEve/typeflow/releases),
+unzip it, and move `TypeFlow.app` to `/Applications`.
+
+The beta is ad-hoc signed but not Apple-notarized. On first launch, macOS may ask
+you to confirm that you want to open it. Right-click `TypeFlow.app`, select
+**Open**, then confirm **Open**. You do not need to disable Gatekeeper.
+
 ## Features
 
 - Global **Control–Option–Command–T** start, pause, and resume hotkey.
@@ -23,32 +39,21 @@ its menu or global hotkey.
 - Three-second menu countdown so you can return focus to the destination field.
 - Draft, progress, and settings persistence between launches.
 
+### How corrections work
+
+TypeFlow chooses a random interval from your **Words between corrections** range.
+When the interval is reached, it creates a plausible typo by substituting a
+nearby key on a US QWERTY keyboard, duplicating a letter, or swapping two
+adjacent letters. It pauses briefly, backspaces the typo, and types the correct
+word. The **Second mistake chance** controls whether it makes another failed
+attempt before correcting the word.
+
 ## Requirements
 
 - macOS 13 Ventura or later.
 - Apple silicon for the prebuilt beta. Building from source uses your Mac's
   current architecture.
 - Accessibility permission to send keystrokes to the active application.
-
-## Install
-
-### Homebrew
-
-```sh
-brew install --cask 0hEve/typeflow/typeflow
-```
-
-The first installation from a non-official tap may ask you to trust this cask.
-See the [Homebrew tap](https://github.com/0hEve/homebrew-typeflow) for details.
-
-### Download
-
-Download the latest ZIP from [GitHub Releases](https://github.com/0hEve/typeflow/releases),
-unzip it, and move `TypeFlow.app` to `/Applications`.
-
-The beta is ad-hoc signed but not Apple-notarized. On first launch, macOS may ask
-you to confirm that you want to open it. Right-click `TypeFlow.app`, select
-**Open**, then confirm **Open**. You do not need to disable Gatekeeper.
 
 ## Use
 
