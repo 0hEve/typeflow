@@ -74,20 +74,35 @@ MainActor.assumeIsolated {
     require(preferences.options.correctionInterval == 5...15, "default correction range changed")
     require(preferences.options.paragraphPauseSeconds == 10...30, "default pause range changed")
 
-    preferences.minimumWPM = 55
-    preferences.maximumWPM = 75
-    preferences.repeatedMistakeChance = 100
+    preferences.setMinimumWPM(150)
+    preferences.setMaximumWPM(200)
+    preferences.setCorrectionMinimum(150)
+    preferences.setCorrectionMaximum(200)
+    preferences.setRepeatedMistakeChance(100)
     preferences.paragraphPauseMode = .fixed
-    preferences.paragraphFixedSeconds = 18
-    require(preferences.options.wordsPerMinute == 55.0...75.0, "custom WPM range was not applied")
+    preferences.setParagraphMinimum(300)
+    preferences.setParagraphMaximum(900)
+    preferences.setParagraphFixed(240)
+    require(preferences.options.wordsPerMinute == 150.0...200.0, "high WPM range was not applied")
+    require(preferences.options.correctionInterval == 150...200, "high correction range was not applied")
     require(preferences.options.repeatedMistakeChance == 1, "100% retry chance was not applied")
-    require(preferences.options.paragraphPauseSeconds == 18...18, "fixed pause was not applied")
+    require(preferences.options.paragraphPauseSeconds == 240...240, "high fixed pause was not applied")
+
+    preferences.setMinimumWPM(250)
+    require(preferences.maximumWPM == 251, "raising the minimum did not preserve the WPM range")
+    preferences.setMaximumWPM(200)
+    require(preferences.minimumWPM == 199, "lowering the maximum did not preserve the WPM range")
+    preferences.setMinimumWPM(150)
 
     let reloaded = TypingPreferences(defaults: defaults)
-    require(reloaded.minimumWPM == 55, "minimum WPM was not persisted")
-    require(reloaded.maximumWPM == 75, "maximum WPM was not persisted")
+    require(reloaded.minimumWPM == 150, "minimum WPM was not persisted")
+    require(reloaded.maximumWPM == 200, "maximum WPM was not persisted")
+    require(reloaded.correctionMinimumWords == 150, "minimum correction interval was not persisted")
+    require(reloaded.correctionMaximumWords == 200, "maximum correction interval was not persisted")
     require(reloaded.repeatedMistakeChance == 100, "retry chance was not persisted")
-    require(reloaded.paragraphFixedSeconds == 18, "fixed pause was not persisted")
+    require(reloaded.paragraphMinimumSeconds == 300, "minimum pause was not persisted")
+    require(reloaded.paragraphMaximumSeconds == 900, "maximum pause was not persisted")
+    require(reloaded.paragraphFixedSeconds == 240, "fixed pause was not persisted")
 
     defaults.removePersistentDomain(forName: suiteName)
 }

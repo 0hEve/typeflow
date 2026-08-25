@@ -25,18 +25,18 @@ final class TypingPreferences: ObservableObject {
     static let defaultParagraphMaximum = 30
     static let defaultParagraphFixed = 20
 
-    @Published var minimumWPM: Int { didSet { save(minimumWPM, Keys.minimumWPM) } }
-    @Published var maximumWPM: Int { didSet { save(maximumWPM, Keys.maximumWPM) } }
+    @Published private(set) var minimumWPM: Int { didSet { save(minimumWPM, Keys.minimumWPM) } }
+    @Published private(set) var maximumWPM: Int { didSet { save(maximumWPM, Keys.maximumWPM) } }
     @Published var naturalCorrections: Bool {
         didSet { save(naturalCorrections, Keys.naturalCorrections) }
     }
-    @Published var correctionMinimumWords: Int {
+    @Published private(set) var correctionMinimumWords: Int {
         didSet { save(correctionMinimumWords, Keys.correctionMinimumWords) }
     }
-    @Published var correctionMaximumWords: Int {
+    @Published private(set) var correctionMaximumWords: Int {
         didSet { save(correctionMaximumWords, Keys.correctionMaximumWords) }
     }
-    @Published var repeatedMistakeChance: Int {
+    @Published private(set) var repeatedMistakeChance: Int {
         didSet { save(repeatedMistakeChance, Keys.repeatedMistakeChance) }
     }
     @Published var paragraphPauses: Bool {
@@ -45,13 +45,13 @@ final class TypingPreferences: ObservableObject {
     @Published var paragraphPauseMode: ParagraphPauseMode {
         didSet { save(paragraphPauseMode.rawValue, Keys.paragraphPauseMode) }
     }
-    @Published var paragraphMinimumSeconds: Int {
+    @Published private(set) var paragraphMinimumSeconds: Int {
         didSet { save(paragraphMinimumSeconds, Keys.paragraphMinimumSeconds) }
     }
-    @Published var paragraphMaximumSeconds: Int {
+    @Published private(set) var paragraphMaximumSeconds: Int {
         didSet { save(paragraphMaximumSeconds, Keys.paragraphMaximumSeconds) }
     }
-    @Published var paragraphFixedSeconds: Int {
+    @Published private(set) var paragraphFixedSeconds: Int {
         didSet { save(paragraphFixedSeconds, Keys.paragraphFixedSeconds) }
     }
 
@@ -79,14 +79,14 @@ final class TypingPreferences: ObservableObject {
             key: Keys.minimumWPM,
             fallback: Self.defaultMinimumWPM
         )
-        let normalizedMinimumWPM = min(max(loadedMinimumWPM, 20), 115)
+        let normalizedMinimumWPM = min(max(loadedMinimumWPM, 1), Int.max - 1)
         minimumWPM = normalizedMinimumWPM
         let loadedMaximumWPM = Self.integer(
             defaults,
             key: Keys.maximumWPM,
             fallback: Self.defaultMaximumWPM
         )
-        maximumWPM = min(max(loadedMaximumWPM, normalizedMinimumWPM + 5), 120)
+        maximumWPM = max(loadedMaximumWPM, normalizedMinimumWPM + 1)
 
         naturalCorrections = Self.boolean(
             defaults,
@@ -98,17 +98,14 @@ final class TypingPreferences: ObservableObject {
             key: Keys.correctionMinimumWords,
             fallback: Self.defaultCorrectionMinimum
         )
-        let normalizedCorrectionMinimum = min(max(loadedCorrectionMinimum, 1), 49)
+        let normalizedCorrectionMinimum = min(max(loadedCorrectionMinimum, 1), Int.max - 1)
         correctionMinimumWords = normalizedCorrectionMinimum
         let loadedCorrectionMaximum = Self.integer(
             defaults,
             key: Keys.correctionMaximumWords,
             fallback: Self.defaultCorrectionMaximum
         )
-        correctionMaximumWords = min(max(
-            loadedCorrectionMaximum,
-            normalizedCorrectionMinimum + 1
-        ), 50)
+        correctionMaximumWords = max(loadedCorrectionMaximum, normalizedCorrectionMinimum + 1)
         repeatedMistakeChance = min(max(Self.integer(
             defaults,
             key: Keys.repeatedMistakeChance,
@@ -128,22 +125,22 @@ final class TypingPreferences: ObservableObject {
             key: Keys.paragraphMinimumSeconds,
             fallback: Self.defaultParagraphMinimum
         )
-        let normalizedParagraphMinimum = min(max(loadedParagraphMinimum, 1), 179)
+        let normalizedParagraphMinimum = min(max(loadedParagraphMinimum, 1), Int.max - 1)
         paragraphMinimumSeconds = normalizedParagraphMinimum
         let loadedParagraphMaximum = Self.integer(
             defaults,
             key: Keys.paragraphMaximumSeconds,
             fallback: Self.defaultParagraphMaximum
         )
-        paragraphMaximumSeconds = min(max(
+        paragraphMaximumSeconds = max(
             loadedParagraphMaximum,
             normalizedParagraphMinimum + 1
-        ), 180)
-        paragraphFixedSeconds = min(max(Self.integer(
+        )
+        paragraphFixedSeconds = max(Self.integer(
             defaults,
             key: Keys.paragraphFixedSeconds,
             fallback: Self.defaultParagraphFixed
-        ), 1), 180)
+        ), 1)
     }
 
     var options: TypingOptions {
@@ -173,6 +170,44 @@ final class TypingPreferences: ObservableObject {
         paragraphMinimumSeconds = Self.defaultParagraphMinimum
         paragraphMaximumSeconds = Self.defaultParagraphMaximum
         paragraphFixedSeconds = Self.defaultParagraphFixed
+    }
+
+    func setMinimumWPM(_ value: Int) {
+        minimumWPM = min(max(value, 1), Int.max - 1)
+        maximumWPM = max(maximumWPM, minimumWPM + 1)
+    }
+
+    func setMaximumWPM(_ value: Int) {
+        maximumWPM = max(value, 2)
+        minimumWPM = min(minimumWPM, maximumWPM - 1)
+    }
+
+    func setCorrectionMinimum(_ value: Int) {
+        correctionMinimumWords = min(max(value, 1), Int.max - 1)
+        correctionMaximumWords = max(correctionMaximumWords, correctionMinimumWords + 1)
+    }
+
+    func setCorrectionMaximum(_ value: Int) {
+        correctionMaximumWords = max(value, 2)
+        correctionMinimumWords = min(correctionMinimumWords, correctionMaximumWords - 1)
+    }
+
+    func setRepeatedMistakeChance(_ value: Int) {
+        repeatedMistakeChance = min(max(value, 0), 100)
+    }
+
+    func setParagraphMinimum(_ value: Int) {
+        paragraphMinimumSeconds = min(max(value, 1), Int.max - 1)
+        paragraphMaximumSeconds = max(paragraphMaximumSeconds, paragraphMinimumSeconds + 1)
+    }
+
+    func setParagraphMaximum(_ value: Int) {
+        paragraphMaximumSeconds = max(value, 2)
+        paragraphMinimumSeconds = min(paragraphMinimumSeconds, paragraphMaximumSeconds - 1)
+    }
+
+    func setParagraphFixed(_ value: Int) {
+        paragraphFixedSeconds = max(value, 1)
     }
 
     private func save(_ value: Any, _ key: String) {
